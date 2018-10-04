@@ -43,7 +43,7 @@ router.post('/register', (req, res) => {
                         throw err;
                     }
                     newUser.password = hash;
-                    newUser.save().then(user => res.status(200).json({status: 'successful', user}));
+                    newUser.save().then(user => res.status(200).json({message: 'successful', user}));
                 });
             })
         }
@@ -80,11 +80,11 @@ router.post('/login', (req, res) => {
                         });
                     })
                 } else {
-                    return res.status(400).json({password: 'Incorrect password'});
+                    return res.status(200).json({password: 'Incorrect password'});
                 }
             })
         } else {
-            return res.status(404).json({"email": "user not found"});
+            return res.status(200).json({"email": "user not found"});
         }
     })
 });

@@ -14,10 +14,10 @@ router.get('/', passport.authenticate('jwt', {session: false}), (req, res) => {
     Profile.findOne({user: req.user.id}).populate('user', ['name', 'email', 'avatar']).then(profile => {
         if (!profile) {
             errors.noProfile = "There is no profile for this user";
-            return res.status(404).json(errors);
+            return res.status(200).json(errors);
         }
-        return res.json(profile);
-    }).catch(err => res.status(404).json(err));
+        return res.json({profile});
+    }).catch(err => res.status(400).json(err));
 });
 
 router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
@@ -52,13 +52,13 @@ router.post('/', passport.authenticate('jwt', {session: false}), (req, res) => {
         if (profile) {
             profileFields.handle = profile.handle;
             Profile.findOneAndUpdate({user: req.user.id}, {$set: profileFields}, {new: true}).then(profile => {
-                res.json(profile);
+                res.json({profile});
             })
         } else {
             Profile.findOne({handle: profileFields.handle}).then(profile => {
                 if(profile) {
                     errors.handle = 'This handle already exists';
-                    res.status(400).json(errors);
+                    res.status(200).json({errors});
                 } else {
                     new Profile(profileFields).save().then(profile => res.json(profile));
                 }
@@ -93,13 +93,13 @@ router.get('/user/:userId', (req, res) => {
 
 router.get('/all', (req, res) => {
     const errors = {};
-    Profile.find({}).then(profiles => {
+    Profile.find({}).populate('user').then(profiles => {
         if (!profiles) {
             errors.noProfiles = 'There are no profiles';
-            return res.status(404).json(errors);
+            return res.status(200).json(errors);
         }
-        res.json(profiles)
-    }).catch(err => res.status(404).send({profile: 'Couldn\'t find any profiles'}));
+        res.json({profiles})
+    }).catch(err => res.status(200).send({profile: 'Couldn\'t find any profiles'}));
 });
 
 router.post(
@@ -128,7 +128,7 @@ router.post(
         // Add to exp array
         profile.experience.unshift(newExp);
   
-        profile.save().then(profile => res.json(profile));
+        profile.save().then(profile => res.json({profile}));
       });
     }
   );
@@ -142,7 +142,7 @@ router.post(
         // Check Validation
         if (!isValid) {
             // Return any errors with 400 status
-            return res.status(400).json(errors);
+            return res.status(200).json(errors);
         }
     
         Profile.findOne({ user: req.user.id }).then(profile => {
@@ -159,7 +159,7 @@ router.post(
             // Add to exp array
             profile.education.unshift(newEdu);
     
-            profile.save().then(profile => res.json(profile));
+            profile.save().then(profile => res.json({profile}));
         });
     }
   );
@@ -179,9 +179,9 @@ router.post(
           profile.experience.splice(removeIndex, 1);
   
           // Save
-          profile.save().then(profile => res.json(profile));
+          profile.save().then(profile => res.json({profile}));
         })
-        .catch(err => res.status(404).json(err));
+        .catch(err => res.status(200).json(err));
     }
   );
   
@@ -200,9 +200,9 @@ router.post(
           profile.education.splice(removeIndex, 1);
   
           // Save
-          profile.save().then(profile => res.json(profile));
+          profile.save().then(profile => res.json({profile}));
         })
-        .catch(err => res.status(404).json(err));
+        .catch(err => res.status(200).json(err));
     }
   );
   

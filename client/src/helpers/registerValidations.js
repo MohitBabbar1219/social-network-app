@@ -1,3 +1,5 @@
+import validateProfileInputs from "./profileValidations";
+
 const Validator = require('validator');
 
 const { isEmpty } = require('./generalFunctions');
@@ -46,6 +48,6 @@ const validateRegisterInputs = (data) => {
         isValid: isEmpty(errors)
     }
 
-}
+};
 
-module.exports = validateRegisterInputs;
+export default validateRegisterInputs;

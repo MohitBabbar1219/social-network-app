@@ -24,6 +24,6 @@ const validateLoginInputs = (data) => {
         isValid: isEmpty(errors)
     };
 
-}
+};
 
-module.exports = validateLoginInputs;
+export default validateLoginInputs;

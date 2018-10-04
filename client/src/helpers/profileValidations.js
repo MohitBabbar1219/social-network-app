@@ -9,9 +9,9 @@ const validateProfileInputs = (data) => {
     data.status = !isEmpty(data.status) ? data.status : '';
     data.skills = !isEmpty(data.skills) ? data.skills : '';
 
-    // console.log('------------------------------');
-    // console.log(data);
-    // console.log('------------------------------');
+    console.log('------------------------------');
+    console.log(data);
+    console.log('------------------------------');
 
     if (!Validator.isLength(data.handle, { min: 2, max: 40 })) {
         errors.handle = 'Handle needs to between 2 and 4 characters';
@@ -70,6 +70,6 @@ const validateProfileInputs = (data) => {
         isValid: isEmpty(errors)
     };
 
-}
+};
 
-module.exports = validateProfileInputs;
+export default validateProfileInputs;
