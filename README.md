@@ -1,1 +1,1 @@
-# sodecentralized social network app
+# social network app
